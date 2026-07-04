@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen — PMP Simulateur</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="topbar-mount"></div>
+
+<div class="quiz-shell">
+  <div class="quiz-top">
+    <span id="quiz-position">Question 1/30</span>
+    <span class="timer" id="quiz-timer">00:00</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+  <div id="question-mount"></div>
+
+  <div class="q-dots" id="dots-mount"></div>
+
+  <div class="quiz-nav">
+    <button class="btn btn-ghost" id="btn-prev">← Précédente</button>
+    <div class="spacer"></div>
+    <button class="btn btn-brass" id="btn-submit">Terminer l'examen</button>
+    <button class="btn btn-primary" id="btn-next">Suivante →</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/quiz.js"></script>
+</body>
+</html>

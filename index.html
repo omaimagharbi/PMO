@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMP Simulateur — Connexion</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-visual">
+    <div>
+      <div class="mark">Certification PMI · Simulateur d'examen</div>
+      <h1>Entraîne-toi comme le jour&nbsp;J.</h1>
+      <p>65 questions situationnelles réparties sur les trois domaines officiels du PMP — Personnes, Processus, Environnement commercial — avec correction détaillée après chaque examen.</p>
+    </div>
+    <div>
+      <div class="stat-row">
+        <div class="stat"><b>65</b><span>Questions</span></div>
+        <div class="stat"><b>3</b><span>Examens blancs</span></div>
+        <div class="stat"><b>3</b><span>Domaines PMI</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form">
+    <div class="auth-form-inner">
+      <div class="tab-switch">
+        <button id="tab-login" class="active">Connexion</button>
+        <button id="tab-signup">Créer un compte</button>
+      </div>
+
+      <form id="login-form">
+        <div class="field">
+          <label for="login-username">Nom d'utilisateur</label>
+          <input id="login-username" type="text" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="login-password">Mot de passe</label>
+          <input id="login-password" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="error-text" id="login-error"></div>
+        <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+      </form>
+
+      <form id="signup-form" style="display:none">
+        <div class="field">
+          <label for="signup-username">Nom d'utilisateur</label>
+          <input id="signup-username" type="text" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="signup-password">Mot de passe</label>
+          <input id="signup-password" type="password" autocomplete="new-password" required>
+          <small>4 caractères minimum.</small>
+        </div>
+        <div class="error-text" id="signup-error"></div>
+        <button type="submit" class="btn btn-primary btn-block">Créer mon compte</button>
+      </form>
+
+      <div class="banner" style="margin-top:1.6rem">
+        Compte admin de démonstration : <b>admin</b> / <b>admin123</b> — pense à changer ce mot de passe depuis la page Administration.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/storage.js"></script>
+<script>
+  // déjà connecté ? on saute directement au tableau de bord
+  if (Store.currentUser()) window.location.href = 'dashboard.html';
+
+  const tabLogin = document.getElementById('tab-login');
+  const tabSignup = document.getElementById('tab-signup');
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
+
+  tabLogin.addEventListener('click', () => {
+    tabLogin.classList.add('active'); tabSignup.classList.remove('active');
+    loginForm.style.display = 'block'; signupForm.style.display = 'none';
+  });
+  tabSignup.addEventListener('click', () => {
+    tabSignup.classList.add('active'); tabLogin.classList.remove('active');
+    signupForm.style.display = 'block'; loginForm.style.display = 'none';
+  });
+
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
+    const res = Store.authenticate(username, password);
+    const errEl = document.getElementById('login-error');
+    if (!res.ok) { errEl.textContent = res.error; return; }
+    errEl.textContent = '';
+    Store.login(username);
+    window.location.href = res.user.role === 'admin' ? 'dashboard.html' : 'dashboard.html';
+  });
+
+  signupForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('signup-username').value;
+    const password = document.getElementById('signup-password').value;
+    const res = Store.createUser(username, password);
+    const errEl = document.getElementById('signup-error');
+    if (!res.ok) { errEl.textContent = res.error; return; }
+    errEl.textContent = '';
+    Store.login(username);
+    window.location.href = 'dashboard.html';
+  });
+</script>
+</body>
+</html>

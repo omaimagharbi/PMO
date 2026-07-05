@@ -260,10 +260,10 @@
     var thinkingBubble = appendChatBubble('system', '🔍 Analyse en cours via Claude — comparaison avec la Scope Baseline…');
 
     try {
-      var response = await fetch('/api/scope/analyze-message', {
+      var response = await fetch('/api/scope/actions?action=analyze-message', {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ projectId: projectId, clientMessage: messageText })
+        body: JSON.stringify({ action: 'analyze-message', projectId: projectId, clientMessage: messageText })
       });
       var data = await response.json();
       thinkingBubble.remove();
@@ -322,10 +322,10 @@
     addS1Log('Signature de la CR en cours — enregistrement en base…');
 
     try {
-      var response = await fetch('/api/scope/sign-cr', {
+      var response = await fetch('/api/scope/actions?action=sign-cr', {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ analysisId: lastAnalysis.analysisId })
+        body: JSON.stringify({ action: 'sign-cr', analysisId: lastAnalysis.analysisId })
       });
       var data = await response.json();
 
@@ -370,10 +370,10 @@
     }
 
     try {
-      var response = await fetch('/api/scope/reject-analysis', {
+      var response = await fetch('/api/scope/actions?action=reject-analysis', {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ analysisId: lastAnalysis.analysisId })
+        body: JSON.stringify({ action: 'reject-analysis', analysisId: lastAnalysis.analysisId })
       });
       var data = await response.json();
 
@@ -463,7 +463,7 @@
   async function refreshLoads() {
     var panel = document.getElementById('arbitragePanel');
     try {
-      var response = await fetch('/api/resources/arbitrate', { method: 'GET', headers: authHeaders() });
+      var response = await fetch('/api/resources/actions?action=arbitrate', { method: 'GET', headers: authHeaders() });
       var data = await response.json();
 
       if (!response.ok) {
@@ -517,7 +517,7 @@
     addS2Log('Lancement de l\'arbitrage IA — /api/resources/arbitrate (POST).');
 
     try {
-      var response = await fetch('/api/resources/arbitrate', { method: 'POST', headers: authHeaders() });
+      var response = await fetch('/api/resources/actions?action=arbitrate', { method: 'POST', headers: authHeaders() });
       var data = await response.json();
 
       if (!response.ok) {
@@ -573,10 +573,10 @@
     var panel = document.getElementById('arbitragePanel');
 
     try {
-      var response = await fetch('/api/resources/resolve-arbitration', {
+      var response = await fetch('/api/resources/actions?action=resolve-arbitration', {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ recommendationId: currentRecommendation.recommendationId, decision: decision })
+        body: JSON.stringify({ action: 'resolve-arbitration', recommendationId: currentRecommendation.recommendationId, decision: decision })
       });
       var data = await response.json();
 
@@ -667,10 +667,10 @@
 
   async function sendOpaFeedback(lessonId, decision) {
     try {
-      await fetch('/api/opa/feedback', {
+      await fetch('/api/opa/actions?action=feedback', {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ lessonId: lessonId, decision: decision })
+        body: JSON.stringify({ action: 'feedback', lessonId: lessonId, decision: decision })
       });
     } catch (err) {
       /* Le feedback est un signal secondaire : un échec réseau ici ne doit pas bloquer l'utilisateur. */
@@ -689,10 +689,10 @@
     setCopilotState('thinking');
 
     try {
-      var response = await fetch('/api/opa/search', {
+      var response = await fetch('/api/opa/actions?action=search', {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ taskText: combined })
+        body: JSON.stringify({ action: 'search', taskText: combined })
       });
       var data = await response.json();
 
@@ -747,7 +747,7 @@
     panel.innerHTML = '<p>Calcul en cours (lecture des tâches de baseline + heures loggées, puis projection Claude)…</p>';
 
     try {
-      var response = await fetch('/api/evm/snapshot?projectId=' + encodeURIComponent(projectId), {
+      var response = await fetch('/api/evm/actions?action=snapshot&projectId=' + encodeURIComponent(projectId), {
         method: 'POST',
         headers: authHeaders()
       });
@@ -783,7 +783,7 @@
     panel.innerHTML = '<p>Chargement…</p>';
 
     try {
-      var response = await fetch('/api/opa/drafts', { headers: authHeaders() });
+      var response = await fetch('/api/opa/actions?action=drafts', { headers: authHeaders() });
       var data = await response.json();
 
       if (!response.ok) {
@@ -824,10 +824,10 @@
 
   async function resolveDraft(draftId, decision) {
     try {
-      var response = await fetch('/api/opa/approve-draft', {
+      var response = await fetch('/api/opa/actions?action=approve-draft', {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ draftId: draftId, decision: decision })
+        body: JSON.stringify({ action: 'approve-draft', draftId: draftId, decision: decision })
       });
       var data = await response.json();
       if (!response.ok) {
@@ -881,10 +881,10 @@
     panel.innerHTML = '<p>Simulation en cours (lecture seule, aucune écriture en base)…</p>';
 
     try {
-      var response = await fetch('/api/resources/simulate-transfer', {
+      var response = await fetch('/api/resources/actions?action=simulate-transfer', {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ resourceId: resourceId, hypotheticalTransferPct: Number(transferPct) })
+        body: JSON.stringify({ action: 'simulate-transfer', resourceId: resourceId, hypotheticalTransferPct: Number(transferPct) })
       });
       var data = await response.json();
 

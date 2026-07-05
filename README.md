@@ -148,10 +148,23 @@ Aucune variable d'environnement, aucune clé API, aucun backend n'est requis : l
 
 Un 4ᵉ onglet regroupe 4 fonctionnalités qui dépassent la détection réactive :
 
-1. **EVM Prédictif** (`api/evm/snapshot.js`) — calcule CPI/SPI réels à partir de `project_tasks` et des heures loggées, puis demande à Claude de projeter une date de dépassement budgétaire.
-2. **Mémoire auto-alimentée** (`api/opa/drafts.js`, `approve-draft.js`) — chaque CR signée sur le Scénario 01 génère automatiquement un brouillon de leçon apprise via Claude, à valider ou rejeter avant publication réelle dans la base RAG.
+1. **EVM Prédictif** (`api/evm/actions.js`, action `snapshot`) — calcule CPI/SPI réels à partir de `project_tasks` et des heures loggées, puis demande à Claude de projeter une date de dépassement budgétaire.
+2. **Mémoire auto-alimentée** (`api/opa/actions.js`, actions `drafts` et `approve-draft`) — chaque CR signée sur le Scénario 01 génère automatiquement un brouillon de leçon apprise via Claude, à valider ou rejeter avant publication réelle dans la base RAG.
 3. **Score de confiance** (`api/feedback/confidence.js`) — calcule le taux d'acceptation réel de chaque type de recommandation IA à partir des décisions humaines déjà enregistrées.
-4. **Simulateur "et si"** (`api/resources/simulate-transfer.js`) — simule un transfert de charge hypothétique sans aucune écriture en base, et alerte si la ressource est aussi allouée sur d'autres projets du portefeuille.
+4. **Simulateur "et si"** (`api/resources/actions.js`, action `simulate-transfer`) — simule un transfert de charge hypothétique sans aucune écriture en base, et alerte si la ressource est aussi allouée sur d'autres projets du portefeuille.
+
+### Note sur l'architecture des routes API
+
+Le plan gratuit (Hobby) de Vercel limite un déploiement à 12 fonctions serverless. Pour rester sous cette limite malgré le nombre de fonctionnalités, plusieurs endpoints liés sont regroupés dans un seul fichier, avec un paramètre `action` (en query string ou dans le corps JSON) qui indique quelle logique exécuter :
+
+| Fichier | Actions disponibles |
+|---|---|
+| `api/scope/actions.js` | `analyze-message`, `sign-cr`, `reject-analysis` |
+| `api/resources/actions.js` | `arbitrate` (GET/POST), `resolve-arbitration`, `simulate-transfer` |
+| `api/opa/actions.js` | `ingest`, `search`, `drafts` (GET), `approve-draft`, `feedback` |
+| `api/evm/actions.js` | `snapshot` (GET/POST), `update-task` |
+
+`api/auth/login.js`, `api/scope/upload-charter.js`, `api/resources/webhook-jira.js`, `api/resources/webhook-github.js` et `api/feedback/confidence.js` restent des fichiers indépendants (contraintes techniques différentes : upload multipart, signatures HMAC externes). Total : **9 fonctions**, avec de la marge pour évoluer avant de devoir passer au plan Pro.
 
 ### Mise en route de l'onglet 04
 

@@ -7,14 +7,8 @@
     "api/scope/upload-charter.js": {
       "maxDuration": 30
     },
-    "api/scope/analyze-message.js": {
+    "api/scope/actions.js": {
       "maxDuration": 20
-    },
-    "api/scope/sign-cr.js": {
-      "maxDuration": 20
-    },
-    "api/scope/reject-analysis.js": {
-      "maxDuration": 10
     },
     "api/resources/webhook-jira.js": {
       "maxDuration": 10
@@ -22,38 +16,17 @@
     "api/resources/webhook-github.js": {
       "maxDuration": 10
     },
-    "api/resources/arbitrate.js": {
+    "api/resources/actions.js": {
       "maxDuration": 20
     },
-    "api/resources/resolve-arbitration.js": {
-      "maxDuration": 10
-    },
-    "api/opa/ingest.js": {
+    "api/opa/actions.js": {
       "maxDuration": 20
     },
-    "api/opa/search.js": {
+    "api/evm/actions.js": {
       "maxDuration": 20
-    },
-    "api/opa/drafts.js": {
-      "maxDuration": 10
-    },
-    "api/opa/approve-draft.js": {
-      "maxDuration": 20
-    },
-    "api/opa/feedback.js": {
-      "maxDuration": 10
     },
     "api/feedback/confidence.js": {
       "maxDuration": 10
-    },
-    "api/evm/snapshot.js": {
-      "maxDuration": 20
-    },
-    "api/evm/update-task.js": {
-      "maxDuration": 10
-    },
-    "api/resources/simulate-transfer.js": {
-      "maxDuration": 20
     }
   }
 }

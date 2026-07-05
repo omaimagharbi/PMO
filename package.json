@@ -4,12 +4,12 @@
   "description": "Backend de production NEXUS — PPM Augmenté par l'IA (Vercel Serverless Functions).",
   "private": true,
   "engines": {
-    "node": "24.x"
+    "node": "20.x"
   },
   "scripts": {
     "db:migrate": "psql \"$DATABASE_URL\" -f sql/schema.sql",
     "db:seed-opa": "node scripts/seed-opa-lessons.js",
-    "dev": "vercel dev"
+    "dev": "npx vercel dev"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
@@ -18,8 +18,5 @@
     "jsonwebtoken": "^9.0.2",
     "pdf-parse": "^1.1.1",
     "pg": "^8.13.1"
-  },
-  "devDependencies": {
-    "vercel": "^37.0.0"
   }
 }

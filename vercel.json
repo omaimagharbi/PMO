@@ -1,0 +1,77 @@
+{
+  "version": 2,
+  "functions": {
+    "api/auth/login.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/scope/upload-charter.js": {
+      "memory": 1024,
+      "maxDuration": 30
+    },
+    "api/scope/analyze-message.js": {
+      "memory": 512,
+      "maxDuration": 20
+    },
+    "api/scope/sign-cr.js": {
+      "memory": 512,
+      "maxDuration": 20
+    },
+    "api/scope/reject-analysis.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/resources/webhook-jira.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/resources/webhook-github.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/resources/arbitrate.js": {
+      "memory": 512,
+      "maxDuration": 20
+    },
+    "api/resources/resolve-arbitration.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/opa/ingest.js": {
+      "memory": 512,
+      "maxDuration": 20
+    },
+    "api/opa/search.js": {
+      "memory": 512,
+      "maxDuration": 20
+    },
+    "api/opa/drafts.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/opa/approve-draft.js": {
+      "memory": 512,
+      "maxDuration": 20
+    },
+    "api/opa/feedback.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/feedback/confidence.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/evm/snapshot.js": {
+      "memory": 512,
+      "maxDuration": 20
+    },
+    "api/evm/update-task.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/resources/simulate-transfer.js": {
+      "memory": 512,
+      "maxDuration": 20
+    }
+  }
+}

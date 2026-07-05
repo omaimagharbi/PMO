@@ -180,4 +180,4 @@ Sans ces 3 étapes, le panneau EVM renverra une erreur explicite plutôt qu'un c
 
 ---
 
-**NEXUS** — Prototype pédagogique et commercial. Aucune donnée personnelle ou client réelle n'est utilisée dans cette démonstration. 
+**NEXUS** — Prototype pédagogique et commercial. Aucune donnée personnelle ou client réelle n'est utilisée dans cette démonstration.

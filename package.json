@@ -4,7 +4,7 @@
   "description": "Backend de production NEXUS — PPM Augmenté par l'IA (Vercel Serverless Functions).",
   "private": true,
   "engines": {
-    "node": ">=18.x"
+    "node": "20.x"
   },
   "scripts": {
     "db:migrate": "psql \"$DATABASE_URL\" -f sql/schema.sql",

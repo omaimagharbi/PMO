@@ -1,4 +1,4 @@
-const formidable = require('formidable');
+const { IncomingForm } = require('formidable');
 const fs = require('fs');
 const pdfParse = require('pdf-parse');
 const { query } = require('../_lib/db');
@@ -19,7 +19,7 @@ module.exports = async function handler(req, res) {
 
   if (!requireAuth(req, res)) return;
 
-  const form = formidable({
+  const form = new IncomingForm({
     maxFileSize: 20 * 1024 * 1024, // 20 Mo
     keepExtensions: true
   });

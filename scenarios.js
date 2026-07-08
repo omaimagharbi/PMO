@@ -45,6 +45,12 @@
       authToken = data.token;
       document.getElementById('adminPasswordInput').value = '';
       setAuthStatus('✓ Connecté (jeton valide ' + data.expiresIn + ').', false);
+
+      // Recharger les données qui nécessitent une authentification et qui
+      // avaient pu échouer avant la connexion (ex: charge d'équipe du Scénario 02).
+      if (typeof refreshLoads === 'function') {
+        refreshLoads();
+      }
     } catch (err) {
       setAuthStatus('Erreur réseau : ' + err.message, true);
     }

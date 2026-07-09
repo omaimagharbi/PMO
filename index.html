@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS — PPM Augmenté par l'IA</title>
+<meta name="description" content="NEXUS, plateforme de Project Portfolio Management augmentée par l'IA. De l'épreuve à l'élan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="./tailwind.config.js"></script>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body class="bg-[#F6F7FB] dark:bg-navy-950 text-navy-900 dark:text-navy-50 transition-colors duration-300 min-h-screen font-body">
+
+<header class="sticky top-0 z-40 backdrop-blur bg-white/85 dark:bg-navy-950/85 border-b border-gold-500/25">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 py-3.5 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 20C20 20 16 8 9 8C3 8 2 14 5 17C8 20 16 21 20 20Z" fill="#c9a227"/>
+        <path d="M20 20C20 20 24 8 31 8C37 8 38 14 35 17C32 20 24 21 20 20Z" fill="#183355" class="dark:fill-[#e0c25c]"/>
+        <path d="M20 20C20 20 17 30 12 31C7 32 5 27 8 24C11 21 17 20 20 20Z" fill="#183355" opacity="0.75" class="dark:fill-[#e0c25c] dark:opacity-70"/>
+        <path d="M20 20C20 20 23 30 28 31C33 32 35 27 32 24C29 21 23 20 20 20Z" fill="#c9a227" opacity="0.75"/>
+        <rect x="19.2" y="10" width="1.6" height="20" rx="0.8" fill="#0d1c34" class="dark:fill-navy-100"/>
+      </svg>
+      <div>
+        <p class="font-display font-bold text-lg leading-none tracking-tight text-navy-900 dark:text-white">NEXUS</p>
+        <p class="text-[11px] italic text-gold-600 dark:text-gold-400 leading-none mt-1">De l'épreuve à l'élan</p>
+      </div>
+    </div>
+
+    <nav id="mainNav" class="hidden md:flex items-center gap-1.5 bg-navy-900/5 dark:bg-white/5 rounded-full p-1 border border-navy-900/10 dark:border-white/10">
+      <button data-tab="s1" class="tab-btn active-tab px-4 py-2 rounded-full text-sm font-medium">01 · Dérive de périmètre</button>
+      <button data-tab="s2" class="tab-btn px-4 py-2 rounded-full text-sm font-medium">02 · Charge & arbitrage</button>
+      <button data-tab="s3" class="tab-btn px-4 py-2 rounded-full text-sm font-medium">03 · Copilote OPA</button>
+      <button data-tab="s4" class="tab-btn px-4 py-2 rounded-full text-sm font-medium">04 · Innovation</button>
+      <button data-tab="s5" class="tab-btn px-4 py-2 rounded-full text-sm font-medium">05 · Gestion</button>
+    </nav>
+
+    <button id="darkToggle" aria-label="Basculer le mode sombre" class="w-9 h-9 rounded-full flex items-center justify-center border border-navy-900/15 dark:border-white/15 hover:bg-navy-900/5 dark:hover:bg-white/10 transition">
+      <svg id="iconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+      <svg id="iconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hidden"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    </button>
+  </div>
+
+  <nav id="mobileNav" class="md:hidden flex items-center gap-1 px-4 pb-3 overflow-x-auto">
+    <button data-tab="s1" class="tab-btn active-tab px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap">01 · Dérive</button>
+    <button data-tab="s2" class="tab-btn px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap">02 · Charge</button>
+    <button data-tab="s3" class="tab-btn px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap">03 · Copilote</button>
+    <button data-tab="s4" class="tab-btn px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap">04 · Innovation</button>
+    <button data-tab="s5" class="tab-btn px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap">05 · Gestion</button>
+  </nav>
+</header>
+
+<main class="max-w-7xl mx-auto px-5 sm:px-8 py-8">
+
+<div class="card p-4 mb-3 flex flex-col sm:flex-row sm:items-end gap-3">
+  <div class="flex-1">
+    <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Email</label>
+    <input id="loginEmailInput" type="email" placeholder="vous@catalyste.tn" class="field" autocomplete="username">
+  </div>
+  <div class="flex-1">
+    <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Mot de passe</label>
+    <input id="loginPasswordInput" type="password" placeholder="Mot de passe" class="field" autocomplete="current-password">
+  </div>
+  <button id="loginBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition whitespace-nowrap">Se connecter</button>
+  <span id="authStatus" class="text-xs text-navy-500 dark:text-navy-400"></span>
+</div>
+
+<div class="card p-4 mb-3 flex flex-col sm:flex-row sm:items-end gap-3">
+  <div class="flex-1">
+    <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Sélectionner un projet existant</label>
+    <select id="projectSelector" class="field">
+      <option value="">— Choisir dans la liste (nécessite d'être connecté) —</option>
+    </select>
+  </div>
+  <button id="refreshProjectSelectorBtn" class="text-xs font-semibold border border-navy-900/15 dark:border-white/15 hover:bg-navy-900/5 dark:hover:bg-white/10 px-4 py-2.5 rounded-lg transition whitespace-nowrap">Rafraîchir la liste</button>
+</div>
+
+<div class="card p-4 mb-6 flex flex-col sm:flex-row sm:items-end gap-3">
+  <div class="flex-1">
+    <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">ID Projet (UUID, table <code>projects</code>)</label>
+    <input id="projectIdInput" type="text" placeholder="ex : 8f14e45f-...-9d31" class="field">
+  </div>
+  <div class="flex-1">
+    <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Charte de projet (PDF)</label>
+    <input id="charterFileInput" type="file" accept="application/pdf" class="field text-xs">
+  </div>
+  <button id="uploadCharterBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition whitespace-nowrap">Téléverser la charte</button>
+</div>
+<p id="configStatus" class="text-xs text-navy-500 dark:text-navy-400 -mt-4 mb-6"></p>
+
+<section id="s1" class="scenario-panel active fade-in">
+  <p class="text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 dark:text-gold-400 mb-2">Scénario 01 — Prévention de la dérive</p>
+  <h1 class="font-display font-bold text-2xl sm:text-3xl text-navy-900 dark:text-white mb-2">Détecteur de scope creep & simulateur de chemin critique</h1>
+  <p class="text-sm text-navy-700 dark:text-navy-200 max-w-3xl mb-6">Le client formule une demande dans le chat. Le moteur NEXUS la confronte au périmètre contractuel initial, recalcule le planning en cas de dérive et chiffre l'impact avant toute décision.</p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
+    <div class="lg:col-span-2 card flex flex-col h-[560px]">
+      <div class="px-4 py-3 border-b border-navy-900/10 dark:border-white/10 flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-full bg-navy-700 dark:bg-gold-500 flex items-center justify-center text-white dark:text-navy-950 font-display font-bold text-xs">CL</div>
+        <div>
+          <p class="text-sm font-semibold">Client — Projet AtlasApp</p>
+          <p class="text-[11px] text-navy-500 dark:text-navy-300">Conversation en direct</p>
+        </div>
+      </div>
+
+      <div id="chatFeed" class="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+        <div class="fade-in flex justify-start">
+          <div class="max-w-[80%] bg-navy-100/70 dark:bg-white/10 rounded-2xl rounded-tl-sm px-3.5 py-2.5 text-sm">
+            Bonjour ! Petite question sur l'avancement du sprint en cours.
+          </div>
+        </div>
+        <div class="fade-in flex justify-end">
+          <div class="max-w-[80%] bg-navy-800 dark:bg-navy-700 text-white rounded-2xl rounded-tr-sm px-3.5 py-2.5 text-sm">
+            Bonjour, tout est conforme au planning. Livraison du module Auth prévue vendredi.
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 py-3 border-t border-navy-900/10 dark:border-white/10 space-y-2">
+        <p class="text-[11px] uppercase tracking-wide text-navy-500 dark:text-navy-300 font-semibold mb-1">Simuler un message client</p>
+        <button data-sim="demo" class="sim-btn w-full text-left text-xs px-3 py-2 rounded-lg bg-navy-900/5 dark:bg-white/5 hover:bg-navy-900/10 dark:hover:bg-white/10 transition">« Quand aura-t-on la démo de la V1 ? »</button>
+        <button data-sim="color" class="sim-btn w-full text-left text-xs px-3 py-2 rounded-lg bg-navy-900/5 dark:bg-white/5 hover:bg-navy-900/10 dark:hover:bg-white/10 transition">« Peut-on changer la couleur du bouton principal ? »</button>
+        <button data-sim="offline" class="sim-btn w-full text-left text-xs px-3 py-2 rounded-lg bg-gold-500/15 hover:bg-gold-500/25 border border-gold-500/40 transition font-medium">« Je veux ajouter une option hors-ligne complète pour l'appli mobile »</button>
+      </div>
+    </div>
+
+    <div class="lg:col-span-3 card flex flex-col">
+      <div class="px-5 py-4 border-b border-navy-900/10 dark:border-white/10 flex items-center justify-between">
+        <div>
+          <p class="text-sm font-semibold">Planning — Projet AtlasApp</p>
+          <p class="text-[11px] text-navy-500 dark:text-navy-300">Chemin critique recalculé en temps réel</p>
+        </div>
+        <span id="ganttStatus" class="badge badge-green">Conforme au cadrage</span>
+      </div>
+
+      <div id="alertBanner" class="hidden mx-5 mt-4 rounded-xl border border-red-400/40 bg-red-500/10 px-4 py-3 fade-in">
+        <div class="flex items-start gap-2.5">
+          <svg class="mt-0.5 shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-red-700 dark:text-red-400">Demande hors périmètre détectée</p>
+            <p id="alertRationale" class="text-xs text-navy-700 dark:text-navy-200 mt-1"></p>
+            <div id="alertChips" class="flex flex-wrap gap-2 mt-2.5"></div>
+            <div class="flex gap-2 mt-3">
+              <button id="crButton" class="text-xs font-semibold bg-gold-500 hover:bg-gold-600 text-navy-950 px-4 py-2 rounded-lg transition">Signer la demande de changement</button>
+              <button id="rejectAnalysisButton" class="text-xs font-semibold border border-navy-900/15 dark:border-white/15 px-4 py-2 rounded-lg transition">Rejeter l'analyse</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="crConfirmed" class="hidden mx-5 mt-4 rounded-xl border border-emerald-400/40 bg-emerald-500/10 px-4 py-3 fade-in">
+        <p id="crConfirmedTitle" class="text-sm font-semibold text-emerald-700 dark:text-emerald-400"></p>
+        <p class="text-xs text-navy-700 dark:text-navy-200 mt-1">Le planning et le budget de référence (baseline) ont été mis à jour officiellement. Traçabilité PMP conservée dans le journal d'activité.</p>
+      </div>
+
+      <div class="px-5 py-5 flex-1">
+        <div class="flex text-[10px] font-mono-num text-navy-400 dark:text-navy-400 mb-1.5 pl-[27%]">
+          <div class="flex-1 flex justify-between">
+            <span>J0</span><span>J20</span><span>J40</span><span>J60</span><span id="tlEnd">J65</span>
+          </div>
+        </div>
+        <div id="ganttRows" class="space-y-3"></div>
+      </div>
+
+      <div class="px-5 py-4 border-t border-navy-900/10 dark:border-white/10">
+        <p class="text-[11px] uppercase tracking-wide text-navy-500 dark:text-navy-300 font-semibold mb-2">Journal d'activité</p>
+        <div id="s1Log" class="space-y-1.5 text-xs font-mono-num text-navy-600 dark:text-navy-300 max-h-24 overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s2" class="scenario-panel fade-in">
+  <p class="text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 dark:text-gold-400 mb-2">Scénario 02 — Arbitrage autonome</p>
+  <h1 class="font-display font-bold text-2xl sm:text-3xl text-navy-900 dark:text-white mb-2">Carte thermique & arbitrage de ressources</h1>
+  <p class="text-sm text-navy-700 dark:text-navy-200 max-w-3xl mb-6">NEXUS surveille la charge de chaque membre d'équipe en continu. Dès qu'une surcharge critique est détectée, l'IA analyse le portefeuille de projets et propose un arbitrage chiffré.</p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
+    <div class="lg:col-span-3 card p-5">
+      <div class="flex items-center justify-between mb-4">
+        <p class="text-sm font-semibold">Équipe — Projet AtlasApp</p>
+        <div class="flex items-center gap-3 text-[11px] text-navy-500 dark:text-navy-300">
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Vert ≤ 80%</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span>Orange 81–100%</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-600"></span>Rouge &gt; 100%</span>
+        </div>
+      </div>
+      <div id="resourceGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+    </div>
+
+    <div class="lg:col-span-2 card p-5 flex flex-col">
+      <p class="text-sm font-semibold mb-3">Panneau d'arbitrage IA</p>
+      <div id="arbitragePanel" class="flex-1 flex items-center justify-center text-center px-4">
+        <p class="text-xs text-navy-500 dark:text-navy-400">Sélectionnez une ressource en surcharge (rouge) pour lancer l'analyse d'arbitrage.</p>
+      </div>
+      <div class="mt-4 pt-4 border-t border-navy-900/10 dark:border-white/10">
+        <p class="text-[11px] uppercase tracking-wide text-navy-500 dark:text-navy-300 font-semibold mb-2">Journal d'activité</p>
+        <div id="s2Log" class="space-y-1.5 text-xs font-mono-num text-navy-600 dark:text-navy-300 max-h-28 overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s3" class="scenario-panel fade-in">
+  <p class="text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 dark:text-gold-400 mb-2">Scénario 03 — Mémoire organisationnelle</p>
+  <h1 class="font-display font-bold text-2xl sm:text-3xl text-navy-900 dark:text-white mb-2">Copilote contextuel de leçons apprises (OPA vivantes)</h1>
+  <p class="text-sm text-navy-700 dark:text-navy-200 max-w-3xl mb-6">Pendant la création d'une tâche ou d'un risque, NEXUS scanne en tâche de fond l'historique des projets passés et alerte dès qu'un mot-clé sensible est détecté.</p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
+    <div class="lg:col-span-3 card p-5">
+      <p class="text-sm font-semibold mb-4">Nouvelle tâche / risque</p>
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Titre</label>
+          <input id="taskTitle" type="text" placeholder="Ex : Migration de base de données vers PostgreSQL 16" class="field">
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Description</label>
+          <textarea id="taskDesc" rows="5" placeholder="Décrivez la tâche, ses dépendances et son contexte technique…" class="field resize-none"></textarea>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <p class="text-[11px] w-full text-navy-500 dark:text-navy-400 mb-0.5">Mots-clés suggérés à tester :</p>
+          <button data-kw="Migration de base de données" class="kw-btn text-xs px-3 py-1.5 rounded-full bg-navy-900/5 dark:bg-white/5 hover:bg-navy-900/10 dark:hover:bg-white/10">Migration de base de données</button>
+          <button data-kw="Intégration API tierce paiement" class="kw-btn text-xs px-3 py-1.5 rounded-full bg-navy-900/5 dark:bg-white/5 hover:bg-navy-900/10 dark:hover:bg-white/10">Intégration API tierce paiement</button>
+          <button data-kw="Changement d'hébergeur cloud" class="kw-btn text-xs px-3 py-1.5 rounded-full bg-navy-900/5 dark:bg-white/5 hover:bg-navy-900/10 dark:hover:bg-white/10">Changement d'hébergeur cloud</button>
+        </div>
+        <div class="flex items-center justify-between pt-2">
+          <label class="flex items-center gap-2 text-xs text-navy-600 dark:text-navy-300">
+            <input id="riskToggle" type="checkbox" class="rounded border-navy-900/30">
+            Marquer comme risque
+          </label>
+          <button class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition">Enregistrer la tâche</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 card p-5 flex flex-col min-h-[420px]">
+      <div class="flex items-center gap-2 mb-4">
+        <div id="copilotDot" class="w-2 h-2 rounded-full bg-navy-300 dark:bg-navy-600 transition-colors"></div>
+        <p class="text-sm font-semibold">Copilote IA — analyse en tâche de fond</p>
+      </div>
+      <div id="copilotIdle" class="flex-1 flex items-center justify-center text-center px-4">
+        <p class="text-xs text-navy-500 dark:text-navy-400">En veille. Commencez à saisir un titre ou une description pour activer le scan des leçons apprises.</p>
+      </div>
+      <div id="copilotThinking" class="hidden flex-1 flex flex-col items-center justify-center gap-2">
+        <div class="flex gap-1.5">
+          <span class="thinking-dot w-2.5 h-2.5 rounded-full bg-gold-500"></span>
+          <span class="thinking-dot w-2.5 h-2.5 rounded-full bg-gold-500"></span>
+          <span class="thinking-dot w-2.5 h-2.5 rounded-full bg-gold-500"></span>
+        </div>
+        <p class="text-xs text-navy-500 dark:text-navy-400">Recherche dans la base des OPA…</p>
+      </div>
+      <div id="copilotAlert" class="hidden flex-1 slide-in"></div>
+    </div>
+  </div>
+</section>
+
+<section id="s4" class="scenario-panel fade-in">
+  <p class="text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 dark:text-gold-400 mb-2">Scénario 04 — Briques d'innovation</p>
+  <h1 class="font-display font-bold text-2xl sm:text-3xl text-navy-900 dark:text-white mb-2">EVM prédictif, mémoire auto-alimentée, confiance et simulation</h1>
+  <p class="text-sm text-navy-700 dark:text-navy-200 max-w-3xl mb-6">Quatre briques qui dépassent la simple détection réactive : elles projettent, apprennent, se justifient et permettent de tester une décision avant de la prendre.</p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+    <div class="card p-5">
+      <p class="text-sm font-semibold mb-1">Piste 1 — EVM Prédictif</p>
+      <p class="text-xs text-navy-500 dark:text-navy-400 mb-4">CPI / SPI calculés en direct, avec projection Claude de la date de dépassement.</p>
+      <button id="evmRefreshBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition mb-4">Calculer le snapshot EVM</button>
+      <div id="evmPanel" class="text-xs text-navy-500 dark:text-navy-400">En attente d'un ID de projet et de tâches de baseline (table <code>project_tasks</code>).</div>
+    </div>
+
+    <div class="card p-5">
+      <p class="text-sm font-semibold mb-1">Piste 2 — Mémoire auto-alimentée</p>
+      <p class="text-xs text-navy-500 dark:text-navy-400 mb-4">Brouillons de leçons apprises générés automatiquement à chaque CR signée, en attente de ta validation.</p>
+      <button id="draftsRefreshBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition mb-4">Charger les brouillons en attente</button>
+      <div id="draftsPanel" class="space-y-2 text-xs text-navy-500 dark:text-navy-400 max-h-64 overflow-y-auto">Aucun brouillon chargé.</div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <div class="card p-5">
+      <p class="text-sm font-semibold mb-1">Piste 3 — Score de confiance</p>
+      <p class="text-xs text-navy-500 dark:text-navy-400 mb-4">Taux d'acceptation réel de chaque type de recommandation IA, calculé depuis l'historique de décisions humaines.</p>
+      <div id="confidencePanel" class="grid grid-cols-3 gap-2 text-center">
+        <div class="rounded-lg bg-navy-900/5 dark:bg-white/5 p-2">
+          <p id="confScopeValue" class="font-mono-num text-lg font-bold">—</p>
+          <p class="text-[10px] text-navy-500 dark:text-navy-400">Dérive périmètre</p>
+        </div>
+        <div class="rounded-lg bg-navy-900/5 dark:bg-white/5 p-2">
+          <p id="confArbitrationValue" class="font-mono-num text-lg font-bold">—</p>
+          <p class="text-[10px] text-navy-500 dark:text-navy-400">Arbitrage</p>
+        </div>
+        <div class="rounded-lg bg-navy-900/5 dark:bg-white/5 p-2">
+          <p id="confOpaValue" class="font-mono-num text-lg font-bold">—</p>
+          <p class="text-[10px] text-navy-500 dark:text-navy-400">Alerte OPA</p>
+        </div>
+      </div>
+      <button id="confidenceRefreshBtn" class="mt-4 text-xs font-semibold border border-navy-900/15 dark:border-white/15 hover:bg-navy-900/5 dark:hover:bg-white/10 px-4 py-2 rounded-lg transition">Rafraîchir les scores</button>
+    </div>
+
+    <div class="card p-5">
+      <p class="text-sm font-semibold mb-1">Piste 4 — Simulateur "et si"</p>
+      <p class="text-xs text-navy-500 dark:text-navy-400 mb-3">Teste un transfert de charge hypothétique sans rien écrire en base, et vois l'impact sur les autres projets de la ressource.</p>
+      <div class="flex gap-2 mb-3">
+        <input id="simResourceIdInput" type="text" placeholder="ID de la ressource (UUID)" class="field text-xs">
+        <input id="simTransferPctInput" type="number" min="0" max="100" placeholder="% transfert" class="field text-xs w-28">
+      </div>
+      <button id="simulateBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition mb-3">Simuler (lecture seule)</button>
+      <div id="simulatePanel" class="text-xs text-navy-500 dark:text-navy-400"></div>
+    </div>
+  </div>
+</section>
+
+<section id="s5" class="scenario-panel fade-in">
+  <p class="text-xs font-semibold tracking-[0.18em] uppercase text-gold-600 dark:text-gold-400 mb-2">Onglet 05 — Gestion</p>
+  <h1 class="font-display font-bold text-2xl sm:text-3xl text-navy-900 dark:text-white mb-2">Créer un projet, une équipe et une baseline sans SQL</h1>
+  <p class="text-sm text-navy-700 dark:text-navy-200 max-w-3xl mb-6">Cet onglet remplace les commandes <code>psql</code> manuelles : chaque nouveau projet client se déclare ici, en quelques clics.</p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+
+    <div class="card p-5">
+      <p class="text-sm font-semibold mb-1">Créer un projet</p>
+      <p class="text-xs text-navy-500 dark:text-navy-400 mb-4">Un projet = un client. Le sélecteur en haut de page se rafraîchit automatiquement après création.</p>
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Nom du projet</label>
+          <input id="newProjectName" type="text" placeholder="Ex : Méridia — Certification MdT" class="field">
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Taux journalier (€)</label>
+          <input id="newProjectRate" type="number" min="0" step="1" placeholder="500" class="field">
+        </div>
+        <button id="createProjectBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition w-full">Créer le projet</button>
+        <div id="createProjectStatus" class="text-xs text-navy-500 dark:text-navy-400"></div>
+      </div>
+    </div>
+
+    <div class="card p-5">
+      <p class="text-sm font-semibold mb-1">Clés Jira / GitHub du projet sélectionné</p>
+      <p class="text-xs text-navy-500 dark:text-navy-400 mb-4">Nécessaire pour que les heures loggées (Scénario 02, EVM) soient rattachées au bon projet.</p>
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Clé projet Jira</label>
+          <input id="integJiraKey" type="text" placeholder="Ex : NEXUS" class="field">
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Dépôt GitHub (compte/repo)</label>
+          <input id="integGithubRepo" type="text" placeholder="Ex : catalyste/nexus-delivery" class="field">
+        </div>
+        <button id="saveIntegrationsBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition w-full">Enregistrer</button>
+        <div id="integrationsStatus" class="text-xs text-navy-500 dark:text-navy-400"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+
+    <div class="card p-5">
+      <p class="text-sm font-semibold mb-1">Déclarer une ressource (équipe)</p>
+      <p class="text-xs text-navy-500 dark:text-navy-400 mb-4">Une ligne par personne. L'identifiant Jira/GitHub permet de relier ses heures loggées automatiquement.</p>
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Nom complet</label>
+          <input id="newResourceName" type="text" placeholder="Ex : Sonia T." class="field">
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Rôle</label>
+          <input id="newResourceRole" type="text" placeholder="Ex : Formatrice certifiée PMP" class="field">
+        </div>
+        <div class="flex gap-2">
+          <div class="flex-1">
+            <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Capacité hebdo (h)</label>
+            <input id="newResourceCapacity" type="number" min="1" step="1" placeholder="35" class="field">
+          </div>
+          <div class="flex-1">
+            <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Compte Jira</label>
+            <input id="newResourceJira" type="text" placeholder="Optionnel" class="field">
+          </div>
+          <div class="flex-1">
+            <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Login GitHub</label>
+            <input id="newResourceGithub" type="text" placeholder="Optionnel" class="field">
+          </div>
+        </div>
+        <button id="createResourceBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition w-full">Créer la ressource</button>
+        <div id="createResourceStatus" class="text-xs text-navy-500 dark:text-navy-400"></div>
+      </div>
+    </div>
+
+    <div class="card p-5">
+      <p class="text-sm font-semibold mb-1">Affecter une ressource au projet sélectionné</p>
+      <p class="text-xs text-navy-500 dark:text-navy-400 mb-4">Nécessaire pour que la ressource apparaisse dans la charge du portefeuille (Scénario 02).</p>
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Ressource</label>
+          <select id="assignResourceSelect" class="field">
+            <option value="">— Charger la liste des ressources —</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">% d'allocation sur ce projet</label>
+          <input id="assignAllocationPct" type="number" min="1" max="100" step="1" placeholder="100" class="field">
+        </div>
+        <button id="assignResourceBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition w-full">Affecter au projet</button>
+        <div id="assignResourceStatus" class="text-xs text-navy-500 dark:text-navy-400"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+    <div class="card p-5">
+      <p class="text-sm font-semibold mb-1">Ajouter une tâche de baseline (EVM)</p>
+      <p class="text-xs text-navy-500 dark:text-navy-400 mb-4">Au moins une tâche est nécessaire pour activer le panneau EVM du projet sélectionné (Scénario 04).</p>
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Nom de la tâche</label>
+          <input id="newTaskName" type="text" placeholder="Ex : Conception des modules pédagogiques" class="field">
+        </div>
+        <div class="flex gap-2">
+          <div class="flex-1">
+            <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Jour de début (J+)</label>
+            <input id="newTaskStartDay" type="number" min="0" step="1" placeholder="5" class="field">
+          </div>
+          <div class="flex-1">
+            <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Durée (jours)</label>
+            <input id="newTaskDuration" type="number" min="1" step="1" placeholder="20" class="field">
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <div class="flex-1">
+            <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Coût prévu (€)</label>
+            <input id="newTaskCost" type="number" min="0" step="1" placeholder="8500" class="field">
+          </div>
+          <div class="flex-1">
+            <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">% avancement</label>
+            <input id="newTaskPct" type="number" min="0" max="100" step="1" placeholder="40" class="field">
+          </div>
+        </div>
+        <button id="createTaskBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition w-full">Ajouter la tâche</button>
+        <div id="createTaskStatus" class="text-xs text-navy-500 dark:text-navy-400"></div>
+      </div>
+    </div>
+
+    <div class="card p-5">
+      <p class="text-sm font-semibold mb-1">Date de démarrage réelle du projet</p>
+      <p class="text-xs text-navy-500 dark:text-navy-400 mb-4">Nécessaire pour calculer la Valeur Planifiée (PV) dans l'EVM.</p>
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs font-semibold text-navy-600 dark:text-navy-300 block mb-1.5">Date de démarrage</label>
+          <input id="newStartDate" type="date" class="field">
+        </div>
+        <button id="setStartDateBtn" class="text-xs font-semibold bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-4 py-2.5 rounded-lg transition w-full">Enregistrer la date</button>
+        <div id="setStartDateStatus" class="text-xs text-navy-500 dark:text-navy-400"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="max-w-7xl mx-auto px-5 sm:px-8 pb-8 pt-4">
+  <p class="text-[11px] text-navy-400 dark:text-navy-500">NEXUS — PPM Augmenté par l'IA · Prototype fonctionnel (MVP) · Démonstration locale, aucune donnée n'est transmise à un serveur.</p>
+</footer>
+
+<script src="./app.js"></script>
+<script src="./scenarios.js"></script>
+</body>
+</html>

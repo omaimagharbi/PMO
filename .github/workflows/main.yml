@@ -1,0 +1,17 @@
+name: Creer Admin Manuel
+on:
+  workflow_dispatch:
+
+jobs:
+  create-admin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - name: Lancer le script de creation
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: node scripts/create-user.js --email toi@catalyste.tn --password "MonMotDePasseFort123"

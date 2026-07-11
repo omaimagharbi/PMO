@@ -14,4 +14,4 @@ jobs:
       - name: Lancer le script de creation
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: node scripts/create-user.js --email toi@catalyste.tn --password "MonMotDePasseFort123"
+        run: node scripts/create-user.js --email admin@catalyste.tn --password "MonMotDePasseFort123"

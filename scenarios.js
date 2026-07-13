@@ -24,18 +24,21 @@
   }
 
   function applyRoleVisibility() {
-    // L'onglet 05 (Gestion) reste réservé aux comptes admin. Les endpoints
-    // eux-mêmes ne sont pas encore restreints par rôle (Phase 2) : ce
-    // masquage est une première couche d'ergonomie, pas une sécurité en soi.
+    // Les onglets 02 (vue portefeuille cross-projets) et 05 (Gestion) sont
+    // désormais refusés côté API pour les comptes non-admin (Phase 2) : on
+    // les masque aussi côté interface pour ne pas montrer un onglet qui
+    // renverra systématiquement une erreur 403.
     var isAdmin = currentUser && currentUser.role === 'admin';
-    document.querySelectorAll('.tab-btn[data-tab="s5"]').forEach(function (btn) {
-      btn.style.display = isAdmin ? '' : 'none';
+    ['s2', 's3', 's5'].forEach(function (tabId) {
+      document.querySelectorAll('.tab-btn[data-tab="' + tabId + '"]').forEach(function (btn) {
+        btn.style.display = isAdmin ? '' : 'none';
+      });
+      var panel = document.getElementById(tabId);
+      if (panel && !isAdmin) {
+        panel.classList.remove('fade-in');
+        panel.style.display = 'none';
+      }
     });
-    var s5 = document.getElementById('s5');
-    if (s5 && !isAdmin) {
-      s5.classList.remove('fade-in');
-      s5.style.display = 'none';
-    }
   }
 
   async function login() {
@@ -178,7 +181,22 @@
         headers: authHeaders(),
         body: formData
       });
-      var data = await response.json();
+
+      var rawText = await response.text();
+      var data;
+      try {
+        data = JSON.parse(rawText);
+      } catch (parseErr) {
+        // Le serveur a renvoyé quelque chose de non-JSON (page d'erreur générique
+        // Vercel, timeout, etc.) : on affiche le début du texte brut reçu plutôt
+        // que de planter sur un message générique inexploitable.
+        setConfigStatus(
+          'Erreur serveur inattendue (réponse non-JSON, statut ' + response.status + ') : ' +
+            rawText.slice(0, 200),
+          true
+        );
+        return;
+      }
 
       if (!response.ok) {
         setConfigStatus('Erreur : ' + data.error, true);
@@ -1216,6 +1234,74 @@
     }
   }
 
+  async function createClientAccount() {
+    var projectId = getProjectId();
+    var fullName = document.getElementById('newClientName').value.trim();
+    var email = document.getElementById('newClientEmail').value.trim();
+    var password = document.getElementById('newClientPassword').value;
+
+    if (!projectId) {
+      setStatus('createClientStatus', "Sélectionne d'abord un projet en haut de page.", true);
+      return;
+    }
+    if (!email || !password) {
+      setStatus('createClientStatus', "L'email et le mot de passe sont requis.", true);
+      return;
+    }
+
+    try {
+      var response = await fetch('/api/admin/actions?action=create-client-account', {
+        method: 'POST',
+        headers: authHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ email: email, password: password, projectId: projectId, fullName: fullName || undefined })
+      });
+      var data = await response.json();
+
+      if (!response.ok) {
+        setStatus('createClientStatus', 'Erreur : ' + data.error, true);
+        return;
+      }
+
+      setStatus('createClientStatus', '✓ Compte créé pour ' + data.user.email + '. Communique-lui ce mot de passe temporaire de façon sécurisée (pas par ce message).', false);
+      document.getElementById('newClientName').value = '';
+      document.getElementById('newClientEmail').value = '';
+      document.getElementById('newClientPassword').value = '';
+      refreshClientAccountsList();
+    } catch (err) {
+      setStatus('createClientStatus', 'Erreur réseau : ' + err.message, true);
+    }
+  }
+
+  async function refreshClientAccountsList() {
+    var container = document.getElementById('clientAccountsList');
+    try {
+      var response = await fetch('/api/admin/actions?action=list-client-accounts', { headers: authHeaders() });
+      var data = await response.json();
+
+      if (!response.ok) {
+        container.textContent = 'Erreur : ' + data.error;
+        return;
+      }
+
+      if (data.clients.length === 0) {
+        container.textContent = 'Aucun compte client créé pour le moment.';
+        return;
+      }
+
+      container.innerHTML = '';
+      data.clients.forEach(function (c) {
+        var row = document.createElement('div');
+        row.className = 'border-b border-navy-900/10 dark:border-white/10 pb-2';
+        row.innerHTML = '<span class="font-semibold">' + c.email + '</span>' +
+          (c.full_name ? ' — ' + c.full_name : '') +
+          '<br><span class="text-navy-400">' + (c.project_names.length ? c.project_names.join(', ') : 'aucun projet') + '</span>';
+        container.appendChild(row);
+      });
+    } catch (err) {
+      container.textContent = 'Erreur réseau : ' + err.message;
+    }
+  }
+
   function initScenario5() {
     document.getElementById('createProjectBtn').addEventListener('click', createProject);
     document.getElementById('saveIntegrationsBtn').addEventListener('click', saveIntegrations);
@@ -1223,6 +1309,8 @@
     document.getElementById('assignResourceBtn').addEventListener('click', assignResource);
     document.getElementById('createTaskBtn').addEventListener('click', createTask);
     document.getElementById('setStartDateBtn').addEventListener('click', setStartDate);
+    document.getElementById('createClientBtn').addEventListener('click', createClientAccount);
+    document.getElementById('refreshClientsBtn').addEventListener('click', refreshClientAccountsList);
 
     // Charge la liste des ressources dès qu'on clique sur l'onglet 05
     document.querySelectorAll('.tab-btn[data-tab="s5"]').forEach(function (btn) {

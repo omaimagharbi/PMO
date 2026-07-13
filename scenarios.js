@@ -181,7 +181,22 @@
         headers: authHeaders(),
         body: formData
       });
-      var data = await response.json();
+
+      var rawText = await response.text();
+      var data;
+      try {
+        data = JSON.parse(rawText);
+      } catch (parseErr) {
+        // Le serveur a renvoyé quelque chose de non-JSON (page d'erreur générique
+        // Vercel, timeout, etc.) : on affiche le début du texte brut reçu plutôt
+        // que de planter sur un message générique inexploitable.
+        setConfigStatus(
+          'Erreur serveur inattendue (réponse non-JSON, statut ' + response.status + ') : ' +
+            rawText.slice(0, 200),
+          true
+        );
+        return;
+      }
 
       if (!response.ok) {
         setConfigStatus('Erreur : ' + data.error, true);
